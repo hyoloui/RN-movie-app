@@ -1,11 +1,17 @@
+import styled from "@emotion/native";
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+
+const SectionTitle = styled.Text`
+    font-size: 30px;
+    color: ${(props) => props.theme.title};
+`;
 
 export default function Movies({ navigation: { navigate } }) {
     return (
         <>
             <View>
-                <Text>Movies</Text>
+                <SectionTitle>Movies</SectionTitle>
             </View>
             <TouchableOpacity
                 onPress={() =>

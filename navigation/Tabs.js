@@ -5,14 +5,29 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 // bottom-tab-navigator
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useColorScheme } from "react-native";
+import { DARK_COLOR } from "../colors";
 
 const Tab = createBottomTabNavigator();
 
 export default function Tabs() {
+    const isDark = useColorScheme() === "dark";
+    console.log("🚀 ~ file: Tabs.js:14 ~ Tabs ~ isDark", isDark);
+
     return (
         <Tab.Navigator
-            sceneContainerStyle={{ backgroundColor: "gray" }}
-            screenOptions={{}}
+            screenOptions={{
+                tabBarLabelPosition: "beside-icon",
+                // headerStyle: {
+                //     backgroundColor: DARK_COLOR,
+                // },
+                // tabBarStyle: {
+                //     backgroundColor: DARK_COLOR,
+                // },
+            }}
+            sceneContainerStyle={{
+                backgroundColor: isDark ? DARK_COLOR : "green",
+            }}
         >
             <Tab.Screen
                 options={{
