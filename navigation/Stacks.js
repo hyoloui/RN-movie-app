@@ -3,7 +3,8 @@ import { Text, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 
-const Zero = ({ navigation: { navigate } }) => {
+const Zero = ({ route: { params }, navigation: { navigate } }) => {
+    console.log("🚀 ~ file: Stacks.js:7 ~ Zero ~ params", params);
     return (
         <TouchableOpacity onPress={() => navigate("one")}>
             <Text>제로</Text>
