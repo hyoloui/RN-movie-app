@@ -18,7 +18,8 @@ export default function Tabs() {
         <Tab.Navigator
             screenOptions={{
                 tabBarLabelPosition: "beside-icon",
-                // headerStyle: {
+                tabBarLabel: "Movies",
+                // headerStyle: {  // 다크모드
                 //     backgroundColor: DARK_COLOR,
                 // },
                 // tabBarStyle: {
@@ -26,7 +27,7 @@ export default function Tabs() {
                 // },
             }}
             sceneContainerStyle={{
-                backgroundColor: isDark ? DARK_COLOR : "green",
+                backgroundColor: isDark ? DARK_COLOR : "white",
             }}
         >
             <Tab.Screen
