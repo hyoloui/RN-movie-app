@@ -2,6 +2,7 @@ import styled from "@emotion/native";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
+import HorizentalCard from "../components/HorizentalCard";
 import Slide from "../components/Slide";
 import { getImgPath } from "../utill";
 
@@ -81,27 +82,7 @@ export default function Movies({ navigation: { navigate } }) {
                 {/* 사이드 스크롤 */}
                 <ScrollView horizontal={true}>
                     {topRated.map((card) => (
-                        <View key={card.id} style={{ flexDirection: "row" }}>
-                            <View
-                                style={{ width: 180, height: 400, padding: 10 }}
-                            >
-                                <Image
-                                    style={{ width: "100%", height: "70%" }}
-                                    source={{
-                                        uri: getImgPath(card.poster_path),
-                                    }}
-                                />
-                                <View
-                                    style={{
-                                        padding: 20,
-                                        backgroundColor: "yellow",
-                                    }}
-                                >
-                                    <Text>✨{card.vote_average}</Text>
-                                    <Text>{card.title}</Text>
-                                </View>
-                            </View>
-                        </View>
+                        <HorizentalCard key={card.id} card={card} />
                     ))}
                 </ScrollView>
 
