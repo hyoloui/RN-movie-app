@@ -1,5 +1,5 @@
 import { Image, Text, View } from "react-native";
-import { getImgPath } from "../utill";
+import { getImgPath, untranslated } from "../utill";
 
 export default function VerticalCard({ card }) {
     return (
@@ -23,9 +23,7 @@ export default function VerticalCard({ card }) {
                 <Text>{card.title}</Text>
                 <Text>{card.release_date}</Text>
                 <Text>
-                    {card.overview === ""
-                        ? "해당 영화의 번역을 준비중입니다. 빠른 시일 내에 번역하겠습니다. 감사합니다"
-                        : card.overview}
+                    {card.overview === "" ? untranslated() : card.overview}
                 </Text>
             </View>
         </View>

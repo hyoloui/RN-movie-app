@@ -1,7 +1,7 @@
 import styled from "@emotion/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image, StyleSheet, Text, View } from "react-native";
-import { getImgPath, SCREEN_HEIGHT } from "../utill";
+import { getImgPath, SCREEN_HEIGHT, untranslated } from "../utill";
 
 export default function Slide({ movie }) {
     return (
@@ -46,7 +46,7 @@ export default function Slide({ movie }) {
                         }}
                     >
                         {movie.overview === ""
-                            ? "해당 영화의 번역을 준비중입니다. 빠른 시일 내에 번역하겠습니다. 감사합니다"
+                            ? untranslated()
                             : movie.overview}
                     </Text>
                 </View>
