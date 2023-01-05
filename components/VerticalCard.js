@@ -1,19 +1,18 @@
-import { Image, Text, View } from "react-native";
+import styled from "@emotion/native";
+import { useNavigation } from "@react-navigation/native";
+import { Text, View } from "react-native";
 import { getImgPath, untranslated } from "../utill";
 
 export default function VerticalCard({ card }) {
+  const { navigate } = useNavigation();
   return (
-    <View
+    <Vcard
       key={card.id}
-      style={{
-        flex: 1,
-        borderWidth: 3,
-        borderColor: "green",
-        flexDirection: "row",
-      }}
+      onPress={() =>
+        navigate("Stacks", { screen: "Detail", params: { cardId: card.id } })
+      }
     >
-      <Image
-        style={{ width: 150, height: 200 }}
+      <VcardImg
         source={{
           uri: getImgPath(card.poster_path),
         }}
@@ -23,6 +22,14 @@ export default function VerticalCard({ card }) {
         <Text>{card.release_date}</Text>
         <Text>{card.overview === "" ? untranslated() : card.overview}</Text>
       </View>
-    </View>
+    </Vcard>
   );
 }
+
+const Vcard = styled.TouchableOpacity`
+  flex-direction: row;
+`;
+const VcardImg = styled.Image`
+  width: 150px;
+  height: 200px;
+`;

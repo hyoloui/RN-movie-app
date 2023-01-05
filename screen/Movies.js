@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
-import HorizentalCard from "../components/HorizentalCard";
+import HorizontalCard from "../components/HorizontalCard";
 import VerticalCard from "../components/VerticalCard";
 
 export default function Movies({ navigation: { navigate } }) {
@@ -90,7 +90,7 @@ export default function Movies({ navigation: { navigate } }) {
             ItemSeparatorComponent={<View style={{ width: 10 }} />}
             keyExtractor={(item) => item.id}
             data={topRated}
-            renderItem={({ item }) => <HorizentalCard card={item} />}
+            renderItem={({ item }) => <HorizontalCard card={item} />}
           />
           {/* <ScrollView horizontal={true}>{topRated.map()}</ScrollView> */}
 
