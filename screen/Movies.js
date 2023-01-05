@@ -75,8 +75,8 @@ export default function Movies({ navigation: { navigate } }) {
       ListHeaderComponent={
         <>
           <Swiper height="100%" autoplay loop showsPagination={false}>
-            {nowPlayings.map((movie) => (
-              <Slide key={movie.id} movie={movie} />
+            {nowPlayings.map((card) => (
+              <Slide key={card.id} card={card} />
             ))}
           </Swiper>
 

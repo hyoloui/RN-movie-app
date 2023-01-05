@@ -1,31 +1,37 @@
 import styled from "@emotion/native";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet } from "react-native";
 import { getImgPath, SCREEN_HEIGHT, untranslated } from "../utill";
 
-export default function Slide({ movie }) {
+export default function Slide({ card }) {
+  const { navigate } = useNavigation();
   return (
     <SwiperStyle>
       <Swiperbackground
         style={StyleSheet.absoluteFill}
         source={{
-          uri: getImgPath(movie.backdrop_path),
+          uri: getImgPath(card.backdrop_path),
         }}
       />
       <LinearGradient
         style={StyleSheet.absoluteFill}
         colors={["transparent", "black"]}
       />
-      <SwiperTouchableOpacity>
+      <SwiperTouchableOpacity
+        onPress={() =>
+          navigate("Stacks", { screen: "Detail", params: { cardId: card.id } })
+        }
+      >
         <Poster
           source={{
-            uri: getImgPath(movie.poster_path),
+            uri: getImgPath(card.poster_path),
           }}
         />
         <Column>
-          <Title style={{ color: "white" }}>{movie.title}</Title>
+          <Title style={{ color: "white" }}>{card.title}</Title>
           <Overview style={{ color: "white" }}>
-            ✨{movie.vote_average}/10
+            ✨{card.vote_average}/10
           </Overview>
           <Rating
             style={{
@@ -33,8 +39,8 @@ export default function Slide({ movie }) {
               overflow: "hidden",
             }}
           >
-            {movie.overview === "" ? untranslated() : movie.overview}
-            {movie.overview.length > 5 && "..."}
+            {card.overview === "" ? untranslated() : card.overview}
+            {card.overview.length > 5 && "..."}
           </Rating>
         </Column>
       </SwiperTouchableOpacity>
