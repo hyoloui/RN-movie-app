@@ -2,9 +2,9 @@ import styled from "@emotion/native";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
-import HorizentalCard from "../components/HorizentalCard";
 import Slide from "../components/Slide";
-import { getImgPath } from "../utill";
+import HorizentalCard from "../components/HorizentalCard";
+import VerticalCard from "../components/VerticalCard";
 
 const SectionTitle = styled.Text`
     font-size: 20px;
@@ -31,20 +31,20 @@ export default function Movies({ navigation: { navigate } }) {
 
     const getNowPlayings = async () => {
         const { results } = await fetch(
-            `${BASE_URL}/now_playing?api_key=${API_KEY}&language=en-US&page=1`
+            `${BASE_URL}/now_playing?api_key=${API_KEY}&language=ko-Korean&page=1`
         ).then((res) => res.json());
         setNowPlayings(results);
     };
 
     const getTopRated = async () => {
         const { results } = await fetch(
-            `${BASE_URL}/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+            `${BASE_URL}/top_rated?api_key=${API_KEY}&language=ko-Korean&page=1`
         ).then((res) => res.json());
         setTopRated(results);
     };
     const getUpcoming = async () => {
         const { results } = await fetch(
-            `${BASE_URL}/upcoming?api_key=${API_KEY}&language=en-US&page=1`
+            `${BASE_URL}/upcoming?api_key=${API_KEY}&language=ko-Korean&page=1`
         ).then((res) => res.json());
         setUpcoming(results);
     };
@@ -90,28 +90,7 @@ export default function Movies({ navigation: { navigate } }) {
                 {/* 세로 스크롤 */}
                 <View>
                     {upcoming.map((card) => (
-                        <View
-                            key={card.id}
-                            style={{
-                                flex: 1,
-                                height: 250,
-                                borderWidth: 3,
-                                borderColor: "green",
-                                flexDirection: "row",
-                            }}
-                        >
-                            <Image
-                                style={{ width: 150, height: 200 }}
-                                source={{
-                                    uri: getImgPath(card.poster_path),
-                                }}
-                            />
-                            <View>
-                                <Text>{card.title}</Text>
-                                <Text>{card.release_date}</Text>
-                                <Text>{card.overview}</Text>
-                            </View>
-                        </View>
+                        <VerticalCard key={card.id} card={card} />
                     ))}
                 </View>
             </ScrollView>

@@ -45,7 +45,9 @@ export default function Slide({ movie }) {
                             overflow: "hidden",
                         }}
                     >
-                        {movie.overview}
+                        {movie.overview === ""
+                            ? "해당 영화의 번역을 준비중입니다. 빠른 시일 내에 번역하겠습니다. 감사합니다"
+                            : movie.overview}
                     </Text>
                 </View>
             </View>
