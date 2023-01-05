@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
+import { getImgPath } from "../utill";
 
 const SectionTitle = styled.Text`
     font-size: 20px;
@@ -19,19 +20,40 @@ const Loader = styled.View`
 
 export default function Movies({ navigation: { navigate } }) {
     const [nowPlayings, setNowPlayings] = useState([]);
+    const [topRated, setTopRated] = useState([]);
+    const [upcoming, setUpcoming] = useState([]);
+
     const [isLoading, setIsLoading] = useState(true);
 
     const BASE_URL = "https://api.themoviedb.org/3/movie";
     const API_KEY = "96b0378b0b6a672c7220f91a3bded15f";
+
     const getNowPlayings = async () => {
         const { results } = await fetch(
             `${BASE_URL}/now_playing?api_key=${API_KEY}&language=en-US&page=1`
         ).then((res) => res.json());
         setNowPlayings(results);
+    };
+
+    const getTopRated = async () => {
+        const { results } = await fetch(
+            `${BASE_URL}/top_rated?api_key=${API_KEY}&language=en-US&page=1`
+        ).then((res) => res.json());
+        setTopRated(results);
+    };
+    const getUpcoming = async () => {
+        const { results } = await fetch(
+            `${BASE_URL}/upcoming?api_key=${API_KEY}&language=en-US&page=1`
+        ).then((res) => res.json());
+        setUpcoming(results);
+    };
+    const getData = async () => {
+        await Promise.all([getNowPlayings(), getTopRated(), getUpcoming()]);
         setIsLoading(false);
     };
+
     useEffect(() => {
-        getNowPlayings();
+        getData();
     }, []);
 
     if (isLoading) {
@@ -58,206 +80,58 @@ export default function Movies({ navigation: { navigate } }) {
                 <SectionTitle>Top Rated Movies</SectionTitle>
                 {/* 사이드 스크롤 */}
                 <ScrollView horizontal={true}>
-                    <View style={{ flexDirection: "row" }}>
-                        <View style={{ width: 180, height: 400, padding: 10 }}>
-                            <Image
-                                style={{ width: "100%", height: "70%" }}
-                                source={{
-                                    uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/voddFVdjUoAtfoZZp2RUmuZILDI.jpg",
-                                }}
-                            />
+                    {topRated.map((card) => (
+                        <View key={card.id} style={{ flexDirection: "row" }}>
                             <View
-                                style={{
-                                    padding: 20,
-                                    backgroundColor: "yellow",
-                                }}
+                                style={{ width: 180, height: 400, padding: 10 }}
                             >
-                                <Text>👀 56,984</Text>
-                                <Text>The Godfather</Text>
+                                <Image
+                                    style={{ width: "100%", height: "70%" }}
+                                    source={{
+                                        uri: getImgPath(card.poster_path),
+                                    }}
+                                />
+                                <View
+                                    style={{
+                                        padding: 20,
+                                        backgroundColor: "yellow",
+                                    }}
+                                >
+                                    <Text>✨{card.vote_average}</Text>
+                                    <Text>{card.title}</Text>
+                                </View>
                             </View>
                         </View>
-                        <View style={{ width: 180, height: 400, padding: 10 }}>
-                            <Image
-                                style={{ width: "100%", height: "70%" }}
-                                source={{
-                                    uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/voddFVdjUoAtfoZZp2RUmuZILDI.jpg",
-                                }}
-                            />
-                            <View
-                                style={{
-                                    padding: 20,
-                                    backgroundColor: "yellow",
-                                }}
-                            >
-                                <Text>👀 56,984</Text>
-                                <Text>The Godfather</Text>
-                            </View>
-                        </View>
-                        <View style={{ width: 180, height: 400, padding: 10 }}>
-                            <Image
-                                style={{ width: "100%", height: "70%" }}
-                                source={{
-                                    uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/voddFVdjUoAtfoZZp2RUmuZILDI.jpg",
-                                }}
-                            />
-                            <View
-                                style={{
-                                    padding: 20,
-                                    backgroundColor: "yellow",
-                                }}
-                            >
-                                <Text>👀 56,984</Text>
-                                <Text>The Godfather</Text>
-                            </View>
-                        </View>
-                        <View style={{ width: 180, height: 400, padding: 10 }}>
-                            <Image
-                                style={{ width: "100%", height: "70%" }}
-                                source={{
-                                    uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/voddFVdjUoAtfoZZp2RUmuZILDI.jpg",
-                                }}
-                            />
-                            <View
-                                style={{
-                                    padding: 20,
-                                    backgroundColor: "yellow",
-                                }}
-                            >
-                                <Text>👀 56,984</Text>
-                                <Text>The Godfather</Text>
-                            </View>
-                        </View>
-                        <View style={{ width: 180, height: 400, padding: 10 }}>
-                            <Image
-                                style={{ width: "100%", height: "70%" }}
-                                source={{
-                                    uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/voddFVdjUoAtfoZZp2RUmuZILDI.jpg",
-                                }}
-                            />
-                            <View
-                                style={{
-                                    padding: 20,
-                                    backgroundColor: "yellow",
-                                }}
-                            >
-                                <Text>👀 56,984</Text>
-                                <Text>The Godfather</Text>
-                            </View>
-                        </View>
-                    </View>
+                    ))}
                 </ScrollView>
 
                 <SectionTitle>Upcoming Movies</SectionTitle>
                 {/* 세로 스크롤 */}
                 <View>
-                    <View
-                        style={{
-                            flex: 1,
-                            height: 250,
-                            borderWidth: 3,
-                            borderColor: "green",
-                            flexDirection: "row",
-                        }}
-                    >
-                        <Image
-                            style={{ width: 150, height: 200 }}
-                            source={{
-                                uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/iMmMxF6f2OonUrXrHKBLSYAhXly.jpg",
+                    {upcoming.map((card) => (
+                        <View
+                            key={card.id}
+                            style={{
+                                flex: 1,
+                                height: 250,
+                                borderWidth: 3,
+                                borderColor: "green",
+                                flexDirection: "row",
                             }}
-                        />
-                        <View>
-                            <Text>Movie Title</Text>
-                            <Text>2022-12-02</Text>
-                            <Text>
-                                더미 텍스트, asodivnkj okasdnvklxjzclkvj
-                                ,mnasdkjlv nxzklcjvnd
-                                jhzxkcjvjwheuifhasdmkvskdvn,xzc ojaskdjfa;skdjfw
-                                nxzklcjvnd jhzxkcjvjwheuifhasdmkvskdvn,xzc
-                                ojaskdjfa;skdjfw
-                            </Text>
+                        >
+                            <Image
+                                style={{ width: 150, height: 200 }}
+                                source={{
+                                    uri: getImgPath(card.poster_path),
+                                }}
+                            />
+                            <View>
+                                <Text>{card.title}</Text>
+                                <Text>{card.release_date}</Text>
+                                <Text>{card.overview}</Text>
+                            </View>
                         </View>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            height: 250,
-                            borderWidth: 3,
-                            borderColor: "green",
-                            flexDirection: "row",
-                        }}
-                    >
-                        <Image
-                            style={{ width: 150, height: 200 }}
-                            source={{
-                                uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/iMmMxF6f2OonUrXrHKBLSYAhXly.jpg",
-                            }}
-                        />
-                        <View>
-                            <Text>Movie Title</Text>
-                            <Text>2022-12-02</Text>
-                            <Text>
-                                더미 텍스트, asodivnkj okasdnvklxjzclkvj
-                                ,mnasdkjlv nxzklcjvnd
-                                jhzxkcjvjwheuifhasdmkvskdvn,xzc ojaskdjfa;skdjfw
-                                nxzklcjvnd jhzxkcjvjwheuifhasdmkvskdvn,xzc
-                                ojaskdjfa;skdjfw
-                            </Text>
-                        </View>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            height: 250,
-                            borderWidth: 3,
-                            borderColor: "green",
-                            flexDirection: "row",
-                        }}
-                    >
-                        <Image
-                            style={{ width: 150, height: 200 }}
-                            source={{
-                                uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/iMmMxF6f2OonUrXrHKBLSYAhXly.jpg",
-                            }}
-                        />
-                        <View>
-                            <Text>Movie Title</Text>
-                            <Text>2022-12-02</Text>
-                            <Text>
-                                더미 텍스트, asodivnkj okasdnvklxjzclkvj
-                                ,mnasdkjlv nxzklcjvnd
-                                jhzxkcjvjwheuifhasdmkvskdvn,xzc ojaskdjfa;skdjfw
-                                nxzklcjvnd jhzxkcjvjwheuifhasdmkvskdvn,xzc
-                                ojaskdjfa;skdjfw
-                            </Text>
-                        </View>
-                    </View>
-                    <View
-                        style={{
-                            flex: 1,
-                            height: 250,
-                            borderWidth: 3,
-                            borderColor: "green",
-                            flexDirection: "row",
-                        }}
-                    >
-                        <Image
-                            style={{ width: 150, height: 200 }}
-                            source={{
-                                uri: "https://www.themoviedb.org/t/p/w220_and_h330_face/iMmMxF6f2OonUrXrHKBLSYAhXly.jpg",
-                            }}
-                        />
-                        <View>
-                            <Text>Movie Title</Text>
-                            <Text>2022-12-02</Text>
-                            <Text>
-                                더미 텍스트, asodivnkj okasdnvklxjzclkvj
-                                ,mnasdkjlv nxzklcjvnd
-                                jhzxkcjvjwheuifhasdmkvskdvn,xzc ojaskdjfa;skdjfw
-                                nxzklcjvnd jhzxkcjvjwheuifhasdmkvskdvn,xzc
-                                ojaskdjfa;skdjfw
-                            </Text>
-                        </View>
-                    </View>
+                    ))}
                 </View>
             </ScrollView>
         </>
