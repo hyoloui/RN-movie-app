@@ -1,23 +1,15 @@
 import styled from "@emotion/native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, Text, View } from "react-native";
+import {
+    ActivityIndicator,
+    RefreshControl,
+    ScrollView,
+    View,
+} from "react-native";
 import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
 import HorizentalCard from "../components/HorizentalCard";
 import VerticalCard from "../components/VerticalCard";
-
-const SectionTitle = styled.Text`
-    font-size: 20px;
-    padding: 10px;
-    color: ${(props) => props.theme.title};
-    background-color: blue;
-`;
-
-const Loader = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-`;
 
 export default function Movies({ navigation: { navigate } }) {
     const [nowPlayings, setNowPlayings] = useState([]);
@@ -25,6 +17,7 @@ export default function Movies({ navigation: { navigate } }) {
     const [upcoming, setUpcoming] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const BASE_URL = "https://api.themoviedb.org/3/movie";
     const API_KEY = "96b0378b0b6a672c7220f91a3bded15f";
@@ -53,6 +46,12 @@ export default function Movies({ navigation: { navigate } }) {
         setIsLoading(false);
     };
 
+    const onRefresh = async () => {
+        setIsRefreshing(true);
+        await getData();
+        setIsRefreshing(false);
+    };
+
     useEffect(() => {
         getData();
     }, []);
@@ -67,6 +66,12 @@ export default function Movies({ navigation: { navigate } }) {
     return (
         <>
             <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
                 style={{
                     borderWidth: 3,
                     borderColor: "red",
@@ -97,3 +102,16 @@ export default function Movies({ navigation: { navigate } }) {
         </>
     );
 }
+
+const SectionTitle = styled.Text`
+    font-size: 20px;
+    padding: 10px;
+    color: ${(props) => props.theme.title};
+    background-color: blue;
+`;
+
+const Loader = styled.View`
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+`;
