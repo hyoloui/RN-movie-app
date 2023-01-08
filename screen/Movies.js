@@ -11,51 +11,69 @@ import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
 import HorizontalCard from "../components/HorizontalCard";
 import VerticalCard from "../components/VerticalCard";
+import { useQuery, useQueryClient } from "react-query";
+import { getNowPlaying, getTopRated, getUpcoming } from "../api";
 
 export default function Movies({ navigation: { navigate } }) {
-  const [nowPlayings, setNowPlayings] = useState([]);
-  const [topRated, setTopRated] = useState([]);
-  const [upcoming, setUpcoming] = useState([]);
+  // const [nowPlayings, setNowPlayings] = useState([]);
+  // const [topRated, setTopRated] = useState([]);
+  // const [upcoming, setUpcoming] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const queryClient = useQueryClient();
 
-  const BASE_URL = "https://api.themoviedb.org/3/movie";
-  const API_KEY = "96b0378b0b6a672c7220f91a3bded15f";
+  // const BASE_URL = "https://api.themoviedb.org/3/movie";
+  // const API_KEY = "96b0378b0b6a672c7220f91a3bded15f";
 
-  const getNowPlayings = async () => {
-    const { results } = await fetch(
-      `${BASE_URL}/now_playing?api_key=${API_KEY}&language=ko-Korean&page=1`
-    ).then((res) => res.json());
-    setNowPlayings(results);
-  };
+  const { data: nowPlayingData, isLoading: isLoadingNP } = useQuery(
+    ["Movies", "NowPlaying"],
+    getNowPlaying
+  );
+  const { data: topRatedData, isLoading: isLoadingTR } = useQuery(
+    ["Movies", "TopRated"],
+    getTopRated
+  );
+  const { data: upComingData, isLoading: isLoadingUC } = useQuery(
+    ["Movies", "Upcoming"],
+    getUpcoming
+  );
 
-  const getTopRated = async () => {
-    const { results } = await fetch(
-      `${BASE_URL}/top_rated?api_key=${API_KEY}&language=ko-Korean&page=1`
-    ).then((res) => res.json());
-    setTopRated(results);
-  };
-  const getUpcoming = async () => {
-    const { results } = await fetch(
-      `${BASE_URL}/upcoming?api_key=${API_KEY}&language=ko-Korean&page=1`
-    ).then((res) => res.json());
-    setUpcoming(results);
-  };
-  const getData = async () => {
-    await Promise.all([getNowPlayings(), getTopRated(), getUpcoming()]);
-    setIsLoading(false);
-  };
+  // const getNowPlayings = async () => {
+  //   const { results } = await fetch(
+  //     `${BASE_URL}/now_playing?api_key=${API_KEY}&language=ko-Korean&page=1`
+  //   ).then((res) => res.json());
+  //   setNowPlayings(results);
+  // };
+
+  // const getTopRated = async () => {
+  //   const { results } = await fetch(
+  //     `${BASE_URL}/top_rated?api_key=${API_KEY}&language=ko-Korean&page=1`
+  //   ).then((res) => res.json());
+  //   setTopRated(results);
+  // };
+  // const getUpcoming = async () => {
+  //   const { results } = await fetch(
+  //     `${BASE_URL}/upcoming?api_key=${API_KEY}&language=ko-Korean&page=1`
+  //   ).then((res) => res.json());
+  //   setUpcoming(results);
+  // };
+  // const getData = async () => {
+  //   await Promise.all([getNowPlayings(), getTopRated(), getUpcoming()]);
+  //   setIsLoading(false);
+  // };
+  const isLoading = isLoadingNP || isLoadingTR || isLoadingUC;
 
   const onRefresh = async () => {
+    /* 스크롤 아래로 당겨서 새로고침 */
     setIsRefreshing(true);
-    await getData();
+    await queryClient.refetchQueries(["Movies"]);
     setIsRefreshing(false);
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
 
   if (isLoading) {
     return (
@@ -68,14 +86,14 @@ export default function Movies({ navigation: { navigate } }) {
     <FlatList
       refreshing={isRefreshing}
       onRefresh={onRefresh}
-      data={upcoming}
+      data={upComingData.results}
       renderItem={({ item }) => <VerticalCard card={item} />}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={<View style={{ height: 15 }} />}
       ListHeaderComponent={
         <>
           <Swiper height="100%" autoplay loop showsPagination={false}>
-            {nowPlayings.map((card) => (
+            {nowPlayingData.results.map((card) => (
               <Slide key={card.id} card={card} />
             ))}
           </Swiper>
@@ -89,7 +107,7 @@ export default function Movies({ navigation: { navigate } }) {
             showsHorizontalScrollIndicator={false}
             ItemSeparatorComponent={<View style={{ width: 10 }} />}
             keyExtractor={(item) => item.id}
-            data={topRated}
+            data={topRatedData.results}
             renderItem={({ item }) => <HorizontalCard card={item} />}
           />
           {/* <ScrollView horizontal={true}>{topRated.map()}</ScrollView> */}

@@ -11,35 +11,39 @@ import { LinearGradient } from "expo-linear-gradient";
 import { AntDesign } from "@expo/vector-icons";
 import { getImgPath, SCREEN_HEIGHT } from "../utill";
 
+import { useQuery } from "react-query";
+import { getDetail } from "../api";
+
 export default function Detail({
   navigation: { navigate },
   route: {
     params: { cardId },
   },
 }) {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [data, setData] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
   const isDark = useColorScheme() === "dark";
 
-  const API_KEY = "96b0378b0b6a672c7220f91a3bded15f";
-  const BASE_URL = "https://api.themoviedb.org/3/movie";
-  const getDetail = async () => {
-    const response = await fetch(
-      `${BASE_URL}/${cardId}?api_key=${API_KEY}&language=ko-Korean&append_to_response=videos`
-    ).then((res) => res.json());
+  const { data, isLoading } = useQuery(["Detail", cardId], getDetail);
+  // const API_KEY = "96b0378b0b6a672c7220f91a3bded15f";
+  // const BASE_URL = "https://api.themoviedb.org/3/movie";
+  // const getDetail = async () => {
+  //   const response = await fetch(
+  //     `${BASE_URL}/${cardId}?api_key=${API_KEY}&language=ko-Korean&append_to_response=videos`
+  //   ).then((res) => res.json());
 
-    setData(response);
-    setIsLoading(false);
-  };
+  //   setData(response);
+  //   setIsLoading(false);
+  // };
 
   const openYoutube = async (key) => {
     const url = `https://www.youtube.com/watch?v=${key}`;
     await Linking.openURL(url);
   };
 
-  useEffect(() => {
-    getDetail();
-  }, []);
+  // useEffect(() => {
+  //   getDetail();
+  // }, []);
 
   if (isLoading) {
     return (
