@@ -2,6 +2,7 @@ import styled from "@emotion/native";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   RefreshControl,
   ScrollView,
@@ -11,7 +12,7 @@ import Swiper from "react-native-swiper";
 import Slide from "../components/Slide";
 import HorizontalCard from "../components/HorizontalCard";
 import VerticalCard from "../components/VerticalCard";
-import { useQuery, useQueryClient } from "react-query";
+import { useInfiniteQuery, useQuery, useQueryClient } from "react-query";
 import { getNowPlaying, getTopRated, getUpcoming } from "../api";
 
 export default function Movies({ navigation: { navigate } }) {
@@ -34,10 +35,19 @@ export default function Movies({ navigation: { navigate } }) {
     ["Movies", "TopRated"],
     getTopRated
   );
-  const { data: upComingData, isLoading: isLoadingUC } = useQuery(
-    ["Movies", "Upcoming"],
-    getUpcoming
-  );
+  const {
+    data: upComingData,
+    isLoading: isLoadingUC,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(["Movies", "Upcoming"], getUpcoming, {
+    getNextPageParam: (lastPage) => {
+      if (lastPage.page < lastPage.total_pages) {
+        return lastPage.page + 1;
+      }
+    },
+  });
+  console.log("🚀 ~ file: Movies.js:39 ~ Movies ~ upComingData", upComingData);
 
   // const getNowPlayings = async () => {
   //   const { results } = await fetch(
@@ -74,6 +84,11 @@ export default function Movies({ navigation: { navigate } }) {
   // useEffect(() => {
   //   getData();
   // }, []);
+  const fetchMore = async () => {
+    if (hasNextPage) {
+      await fetchNextPage();
+    }
+  };
 
   if (isLoading) {
     return (
@@ -86,10 +101,6 @@ export default function Movies({ navigation: { navigate } }) {
     <FlatList
       refreshing={isRefreshing}
       onRefresh={onRefresh}
-      data={upComingData.results}
-      renderItem={({ item }) => <VerticalCard card={item} />}
-      keyExtractor={(item) => item.id}
-      ItemSeparatorComponent={<View style={{ height: 15 }} />}
       ListHeaderComponent={
         <>
           <Swiper height="100%" autoplay loop showsPagination={false}>
@@ -116,6 +127,12 @@ export default function Movies({ navigation: { navigate } }) {
           {/* 세로 스크롤 */}
         </>
       }
+      data={upComingData.pages.map((page) => page.results).flat()}
+      renderItem={({ item }) => <VerticalCard card={item} />}
+      keyExtractor={(item) => item.id}
+      ItemSeparatorComponent={<View style={{ height: 15 }} />}
+      onEndReached={fetchMore} // 맨끝에서 실행 할 함수
+      onEndReachedThreshold={0.5} // 맨끝 화면 - index (화면크기) 에서 실행되게 만들어 줌
     />
   );
 }

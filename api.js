@@ -11,10 +11,12 @@ export const getTopRated = () =>
     `${BASE_URL}/top_rated?api_key=${API_KEY}&language=ko-Korean&page=1`
   ).then((res) => res.json());
 
-export const getUpcoming = () =>
-  fetch(
-    `${BASE_URL}/upcoming?api_key=${API_KEY}&language=ko-Korean&page=1`
+export const getUpcoming = ({ pageParam = 1 }) => {
+  console.log("🚀 ~ file: api.js:15 ~ getUpcoming ~ pageParam", pageParam);
+  return fetch(
+    `${BASE_URL}/upcoming?api_key=${API_KEY}&language=ko-Korean&page=${pageParam}`
   ).then((res) => res.json());
+};
 
 export const getDetail = async (params) => {
   console.log("params", params);
