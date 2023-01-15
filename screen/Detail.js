@@ -108,7 +108,7 @@ const Title = styled.Text`
   margin-left: 20px;
 `;
 const Overview = styled.Text`
-  color: ${(props) => props.theme.upcomingText};
+  color: ${(props) => props.theme.color.upcomingText};
   font-size: 15px;
   font-weight: 400;
   padding: 20px;
@@ -119,7 +119,7 @@ const Row = styled.TouchableOpacity`
   margin-bottom: 10px;
 `;
 const VideoName = styled.Text`
-  color: ${(props) => props.theme.upcomingText};
+  color: ${(props) => props.theme.color.upcomingText};
   font-size: 16px;
   line-height: 24px;
   font-weight: 500;
@@ -131,7 +131,7 @@ const YoutubeList = styled.View`
 `;
 
 const SectionTitle = styled.Text`
-  color: ${(props) => props.theme.upcomingText};
+  color: ${(props) => props.theme.color.upcomingText};
   font-size: 30px;
   margin-top: 20px;
   margin-left: 20px;
@@ -145,9 +145,9 @@ const AddReview = styled.TouchableOpacity`
   border-radius: 5px;
   border-width: 1px;
   align-items: center;
-  border-color: ${(props) => props.theme.upcomingText};
+  border-color: ${(props) => props.theme.color.upcomingText};
 `;
 const TempText = styled.Text`
   font-size: 20px;
-  color: ${(props) => props.theme.upcomingText};
+  color: ${(props) => props.theme.color.upcomingText};
 `;

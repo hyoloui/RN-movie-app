@@ -35,7 +35,6 @@ const Hcard = styled.TouchableOpacity`
 const HcardImg = styled.Image`
   width: 120px;
   height: 170px;
-  background-color: grey;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 `;
@@ -45,5 +44,5 @@ const HcardContents = styled.View`
 `;
 
 const HcardText = styled.Text`
-  color: white;
+  color: ${(props) => props.theme.color.upcomingText};
 `;

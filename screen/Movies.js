@@ -140,8 +140,7 @@ export default function Movies({ navigation: { navigate } }) {
 const SectionTitle = styled.Text`
   font-size: 20px;
   padding: 10px;
-  color: ${(props) => props.theme.title};
-  background-color: blue;
+  color: ${(props) => props.theme.color.title};
 `;
 
 const Loader = styled.View`
